@@ -1,7 +1,5 @@
-![Build](https://img.shields.io/github/workflow/status/georgesmith46/bcbp/Release?style=for-the-badge)
-![License](https://img.shields.io/github/license/georgesmith46/bcbp?style=for-the-badge)
-![Bundlephobia](https://img.shields.io/bundlephobia/minzip/bcbp?style=for-the-badge)
-![Version](https://img.shields.io/npm/v/bcbp?style=for-the-badge)
+[![BCBP Version](https://img.shields.io/badge/bcbp-v0.0.1-green.svg?style=flat&logo=github)](https://github.com/phucanh08/bcbp/tree/0.0.1)
+[![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
 # BCBP
 
@@ -12,13 +10,22 @@ Encoding/decoding library for the IATA Bar Coded Boarding Pass
 
 ## Getting started
 
-### Installation
+# Installing
 
-Installation is done using the
-[`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
+Add Get to your pubspec.yaml file:
 
-```bash
-$ dart install bcbp
+```yaml
+dependencies:
+  bcbp:
+    git:
+      url: https://github.com/phucanh08/bcbp.git
+      ref: 0.0.1
+```
+
+Import get in files that it will be used:
+
+```dart
+import 'package:bcbp/bcbp.dart';
 ```
 
 ## Encode
@@ -96,7 +103,7 @@ void main() {
 
 # BarcodedBoardingPass
 
-See [types.ts](src/types.ts) for the definition.
+See [types.ts](lib/src/types.dart) for the definition.
 
 ## License
 
