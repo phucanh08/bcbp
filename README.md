@@ -13,7 +13,7 @@ Encoding/decoding library for the IATA Bar Coded Boarding Pass
 
 ## Usage
 
-Add Get to your pubspec.yaml file:
+Add  *`BCBP`* to your pubspec.yaml file:
 
 ```yaml
 dependencies:
@@ -85,7 +85,7 @@ void main() {
 }
 ```
 
-### Reference Year
+### Decode with Reference Year
 
 Define the year which is used when parsing date fields. If this is undefined, the current year is used.
 
