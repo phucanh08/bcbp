@@ -6,4 +6,3 @@ repository: https://github.com/phucanh08/bcbp
 
 environment:
   sdk: ">=2.16.0 <4.0.0"
-  flutter: ">=2.5.0"

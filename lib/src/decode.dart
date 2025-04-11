@@ -1,4 +1,4 @@
-import 'type.dart';
+import 'types.dart';
 import 'field_lengths.dart';
 import 'utils.dart';
 

@@ -1,16 +1,17 @@
+# BCBP
+
 [![BCBP Version](https://img.shields.io/badge/bcbp-v0.0.1-green.svg?style=flat&logo=github)](https://github.com/phucanh08/bcbp/tree/0.0.1)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
-
-# BCBP
 
 Encoding/decoding library for the IATA Bar Coded Boarding Pass
 
 - Supports version 6 of the BCBP standard
 - Supports any number of legs
 
-## Getting started
+## Requirements
+- Dart 2.16.0 or newer
 
-# Installing
+## Usage
 
 Add Get to your pubspec.yaml file:
 
@@ -28,20 +29,20 @@ Import get in files that it will be used:
 import 'package:bcbp/bcbp.dart';
 ```
 
-## Encode
+### Encode
 
 ```dart
-String bcbpEncode(BarcodedBoardingPass bcbp)
+String bcbpEncode(BarCodedBoardingPass bcbp)
 ```
 
-### Example
+#### Example
 
 ```dart
 import 'package:bcbp/bcbp.dart';
 
 void main() {
   final output = bcbpEncode(
-    BarcodedBoardingPass(
+    BarCodedBoardingPass(
       data: BoardingPassData(
         legs: [
           Leg(
@@ -66,13 +67,13 @@ void main() {
 }
 ```
 
-## Decode
+### Decode
 
 ```dart
-BarcodedBoardingPass bcbpDecode(String barcodeString, {int? referenceYear})
+BarCodedBoardingPass bcbpDecode(String barcodeString, {int? referenceYear})
 ```
 
-### Example
+#### Example
 
 ```dart
 import 'package:bcbp/bcbp.dart';
@@ -101,10 +102,17 @@ void main() {
 }
 ```
 
-# BarcodedBoardingPass
+## BarCodedBoardingPass
 
-See [types.ts](lib/src/types.dart) for the definition.
+See [types.dart](lib/src/types.dart) for the definition.
 
-## License
+## Example app
 
-MIT
+Find the example app [here](./example).
+
+## Contributing
+
+Contributions are welcome.
+In case of any problems look at [existing issues](https://github.com/phucanh08/bcbp/issues), if you cannot find anything related to your problem then open an issue.
+Create an issue before opening a [pull request](https://github.com/phucanh08/bcbp/pulls) for non trivial fixes.
+In case of trivial fixes open a [pull request](https://github.com/phucanh08/bcbp/pulls) directly.
