@@ -13,19 +13,6 @@ Encoding/decoding library for the IATA Bar Coded Boarding Pass
 
 ## Usage
 
-Add  *`BCBP`* to your pubspec.yaml file:
-
-```yaml
-dependencies:
-  bcbp: lastest
-```
-
-Import get in files that it will be used:
-
-```dart
-import 'package:bcbp/bcbp.dart';
-```
-
 ### Encode
 
 ```dart
