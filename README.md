@@ -17,10 +17,7 @@ Add  *`BCBP`* to your pubspec.yaml file:
 
 ```yaml
 dependencies:
-  bcbp:
-    git:
-      url: https://github.com/phucanh08/bcbp.git
-      ref: 0.0.2
+  bcbp: lastest
 ```
 
 Import get in files that it will be used:

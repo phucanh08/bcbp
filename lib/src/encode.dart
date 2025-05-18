@@ -77,6 +77,14 @@ class SectionBuilder {
   }
 }
 
+/// Encodes a [BarCodedBoardingPass] object into a BCBP string.
+///
+/// This function converts a structured boarding pass object into a string format
+/// according to IATA BCBP specifications.
+///
+/// [bcbp] The [BarCodedBoardingPass] object to encode.
+///
+/// Returns a string containing the encoded boarding pass data.
 String bcbpEncode(BarCodedBoardingPass bcbp) {
   if (bcbp.meta != null) {
     bcbp.meta!.formatCode ??= "M";
