@@ -1,6 +1,6 @@
 name: bcbp
 description: "Encoding/decoding library for the IATA Bar Coded Boarding Pass"
-version: 0.0.3
+version: 1.0.0
 homepage: https://github.com/phucanh08/bcbp
 repository: https://github.com/phucanh08/bcbp
 

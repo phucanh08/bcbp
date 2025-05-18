@@ -1,6 +1,6 @@
 # BCBP
 
-[![BCBP Version](https://img.shields.io/badge/bcbp-v0.0.3-green.svg?style=flat&logo=github)](https://github.com/phucanh08/bcbp/tree/0.0.3)
+[![BCBP Version](https://img.shields.io/badge/bcbp-v1.0.0-green.svg?style=flat&logo=github)](https://github.com/phucanh08/bcbp/tree/1.0.0)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
 Encoding/decoding library for the IATA Bar Coded Boarding Pass

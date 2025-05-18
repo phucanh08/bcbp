@@ -1,3 +1,7 @@
+## 1.0.0
+
+* Update version name.
+
 ## 0.0.3
 
 * Add dartdoc comment.
