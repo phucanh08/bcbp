@@ -23,7 +23,8 @@ class SectionDecoder {
     if (length == null) {
       value = barcodeString!.substring(start);
     } else {
-      value = barcodeString!.substring(start, start + length <= barcodeLength ? start + length : barcodeLength);
+      value = barcodeString!.substring(start,
+          start + length <= barcodeLength ? start + length : barcodeLength);
     }
 
     currentIndex += length ?? barcodeLength;
@@ -71,6 +72,15 @@ class SectionDecoder {
   }
 }
 
+/// Decodes a Bar Coded Boarding Pass (BCBP) string into structured data.
+///
+/// This function parses a BCBP string according to IATA specifications and returns
+/// a structured [BarCodedBoardingPass] object containing all the boarding pass data.
+///
+/// [barcodeString] The BCBP string to decode.
+/// [referenceYear] Optional reference year for date fields. If not provided, current year is used.
+///
+/// Returns a [BarCodedBoardingPass] object containing the decoded data.
 BarCodedBoardingPass bcbpDecode(String barcodeString, {int? referenceYear}) {
   final bcbp = BarCodedBoardingPass(
     data: BoardingPassData(),
@@ -80,9 +90,12 @@ BarCodedBoardingPass bcbpDecode(String barcodeString, {int? referenceYear}) {
   final mainSection = SectionDecoder(barcodeString);
 
   bcbp.meta!.formatCode = mainSection.getNextString(FieldLengths.FORMAT_CODE);
-  bcbp.meta!.numberOfLegs = mainSection.getNextNumber(FieldLengths.NUMBER_OF_LEGS) ?? 0;
-  bcbp.data!.passengerName = mainSection.getNextString(FieldLengths.PASSENGER_NAME);
-  bcbp.meta!.electronicTicketIndicator = mainSection.getNextString(FieldLengths.ELECTRONIC_TICKET_INDICATOR);
+  bcbp.meta!.numberOfLegs =
+      mainSection.getNextNumber(FieldLengths.NUMBER_OF_LEGS) ?? 0;
+  bcbp.data!.passengerName =
+      mainSection.getNextString(FieldLengths.PASSENGER_NAME);
+  bcbp.meta!.electronicTicketIndicator =
+      mainSection.getNextString(FieldLengths.ELECTRONIC_TICKET_INDICATOR);
 
   List<Leg> legs = [];
   bcbp.data!.legs = legs;
@@ -91,19 +104,20 @@ BarCodedBoardingPass bcbpDecode(String barcodeString, {int? referenceYear}) {
 
   for (int legIndex = 0; legIndex < bcbp.meta!.numberOfLegs!; legIndex++) {
     final leg = Leg(
-      operatingCarrierPNR: mainSection.getNextString(FieldLengths.OPERATING_CARRIER_PNR),
-      departureAirport: mainSection.getNextString(FieldLengths.DEPARTURE_AIRPORT),
+      operatingCarrierPNR:
+          mainSection.getNextString(FieldLengths.OPERATING_CARRIER_PNR),
+      departureAirport:
+          mainSection.getNextString(FieldLengths.DEPARTURE_AIRPORT),
       arrivalAirport: mainSection.getNextString(FieldLengths.ARRIVAL_AIRPORT),
-      operatingCarrierDesignator: mainSection.getNextString(FieldLengths.OPERATING_CARRIER_DESIGNATOR),
+      operatingCarrierDesignator:
+          mainSection.getNextString(FieldLengths.OPERATING_CARRIER_DESIGNATOR),
       flightNumber: mainSection.getNextString(FieldLengths.FLIGHT_NUMBER),
-      flightDate: mainSection.getNextDate(
-          FieldLengths.FLIGHT_DATE,
-          false,
-          referenceYear: referenceYear
-      ),
+      flightDate: mainSection.getNextDate(FieldLengths.FLIGHT_DATE, false,
+          referenceYear: referenceYear),
       compartmentCode: mainSection.getNextString(FieldLengths.COMPARTMENT_CODE),
       seatNumber: mainSection.getNextString(FieldLengths.SEAT_NUMBER),
-      checkInSequenceNumber: mainSection.getNextString(FieldLengths.CHECK_IN_SEQUENCE_NUMBER),
+      checkInSequenceNumber:
+          mainSection.getNextString(FieldLengths.CHECK_IN_SEQUENCE_NUMBER),
       passengerStatus: mainSection.getNextString(FieldLengths.PASSENGER_STATUS),
     );
 
@@ -113,54 +127,40 @@ BarCodedBoardingPass bcbpDecode(String barcodeString, {int? referenceYear}) {
     );
 
     if (!addedUniqueFields) {
-      bcbp.meta!.versionNumberIndicator = conditionalSection.getNextString(
-          FieldLengths.VERSION_NUMBER_INDICATOR
-      );
-      bcbp.meta!.versionNumber = conditionalSection.getNextNumber(
-          FieldLengths.VERSION_NUMBER
-      );
+      bcbp.meta!.versionNumberIndicator = conditionalSection
+          .getNextString(FieldLengths.VERSION_NUMBER_INDICATOR);
+      bcbp.meta!.versionNumber =
+          conditionalSection.getNextNumber(FieldLengths.VERSION_NUMBER);
 
       final sectionASize = conditionalSection.getNextSectionSize();
-      final sectionA = SectionDecoder(
-          conditionalSection.getNextString(sectionASize)
-      );
-      bcbp.data!.passengerDescription = sectionA.getNextString(
-          FieldLengths.PASSENGER_DESCRIPTION
-      );
-      bcbp.data!.checkInSource = sectionA.getNextString(
-          FieldLengths.CHECK_IN_SOURCE
-      );
-      bcbp.data!.boardingPassIssuanceSource = sectionA.getNextString(
-          FieldLengths.BOARDING_PASS_ISSUANCE_SOURCE
-      );
+      final sectionA =
+          SectionDecoder(conditionalSection.getNextString(sectionASize));
+      bcbp.data!.passengerDescription =
+          sectionA.getNextString(FieldLengths.PASSENGER_DESCRIPTION);
+      bcbp.data!.checkInSource =
+          sectionA.getNextString(FieldLengths.CHECK_IN_SOURCE);
+      bcbp.data!.boardingPassIssuanceSource =
+          sectionA.getNextString(FieldLengths.BOARDING_PASS_ISSUANCE_SOURCE);
       bcbp.data!.issuanceDate = sectionA.getNextDate(
-          FieldLengths.ISSUANCE_DATE,
-          true,
-          referenceYear: referenceYear
-      );
-      bcbp.data!.documentType = sectionA.getNextString(
-          FieldLengths.DOCUMENT_TYPE
-      );
-      bcbp.data!.boardingPassIssuerDesignator = sectionA.getNextString(
-          FieldLengths.BOARDING_PASS_ISSUER_DESIGNATOR
-      );
-      bcbp.data!.baggageTagNumber = sectionA.getNextString(
-          FieldLengths.BAGGAGE_TAG_NUMBER
-      );
-      bcbp.data!.firstBaggageTagNumber = sectionA.getNextString(
-          FieldLengths.FIRST_BAGGAGE_TAG_NUMBER
-      );
-      bcbp.data!.secondBaggageTagNumber = sectionA.getNextString(
-          FieldLengths.SECOND_BAGGAGE_TAG_NUMBER
-      );
+          FieldLengths.ISSUANCE_DATE, true,
+          referenceYear: referenceYear);
+      bcbp.data!.documentType =
+          sectionA.getNextString(FieldLengths.DOCUMENT_TYPE);
+      bcbp.data!.boardingPassIssuerDesignator =
+          sectionA.getNextString(FieldLengths.BOARDING_PASS_ISSUER_DESIGNATOR);
+      bcbp.data!.baggageTagNumber =
+          sectionA.getNextString(FieldLengths.BAGGAGE_TAG_NUMBER);
+      bcbp.data!.firstBaggageTagNumber =
+          sectionA.getNextString(FieldLengths.FIRST_BAGGAGE_TAG_NUMBER);
+      bcbp.data!.secondBaggageTagNumber =
+          sectionA.getNextString(FieldLengths.SECOND_BAGGAGE_TAG_NUMBER);
 
       addedUniqueFields = true;
     }
 
     final sectionBSize = conditionalSection.getNextSectionSize();
-    final sectionB = SectionDecoder(
-        conditionalSection.getNextString(sectionBSize)
-    );
+    final sectionB =
+        SectionDecoder(conditionalSection.getNextString(sectionBSize));
 
     // Cập nhật các trường trong leg từ sectionB
     final updatedLeg = Leg(
@@ -174,25 +174,22 @@ BarCodedBoardingPass bcbpDecode(String barcodeString, {int? referenceYear}) {
       seatNumber: leg.seatNumber,
       checkInSequenceNumber: leg.checkInSequenceNumber,
       passengerStatus: leg.passengerStatus,
-      airlineNumericCode: sectionB.getNextString(FieldLengths.AIRLINE_NUMERIC_CODE),
+      airlineNumericCode:
+          sectionB.getNextString(FieldLengths.AIRLINE_NUMERIC_CODE),
       serialNumber: sectionB.getNextString(FieldLengths.SERIAL_NUMBER),
-      selecteeIndicator: sectionB.getNextString(FieldLengths.SELECTEE_INDICATOR),
-      internationalDocumentationVerification: sectionB.getNextString(
-          FieldLengths.INTERNATIONAL_DOCUMENTATION_VERIFICATION
-      ),
-      marketingCarrierDesignator: sectionB.getNextString(
-          FieldLengths.MARKETING_CARRIER_DESIGNATOR
-      ),
-      frequentFlyerAirlineDesignator: sectionB.getNextString(
-          FieldLengths.FREQUENT_FLYER_AIRLINE_DESIGNATOR
-      ),
-      frequentFlyerNumber: sectionB.getNextString(
-          FieldLengths.FREQUENT_FLYER_NUMBER
-      ),
+      selecteeIndicator:
+          sectionB.getNextString(FieldLengths.SELECTEE_INDICATOR),
+      internationalDocumentationVerification: sectionB
+          .getNextString(FieldLengths.INTERNATIONAL_DOCUMENTATION_VERIFICATION),
+      marketingCarrierDesignator:
+          sectionB.getNextString(FieldLengths.MARKETING_CARRIER_DESIGNATOR),
+      frequentFlyerAirlineDesignator: sectionB
+          .getNextString(FieldLengths.FREQUENT_FLYER_AIRLINE_DESIGNATOR),
+      frequentFlyerNumber:
+          sectionB.getNextString(FieldLengths.FREQUENT_FLYER_NUMBER),
       idIndicator: sectionB.getNextString(FieldLengths.ID_INDICATOR),
-      freeBaggageAllowance: sectionB.getNextString(
-          FieldLengths.FREE_BAGGAGE_ALLOWANCE
-      ),
+      freeBaggageAllowance:
+          sectionB.getNextString(FieldLengths.FREE_BAGGAGE_ALLOWANCE),
       fastTrack: sectionB.getNextBoolean(),
       airlineInfo: conditionalSection.getRemainingString(),
     );
@@ -200,27 +197,27 @@ BarCodedBoardingPass bcbpDecode(String barcodeString, {int? referenceYear}) {
     bcbp.data!.legs!.add(updatedLeg);
   }
 
-  bcbp.meta!.securityDataIndicator = mainSection.getNextString(
-      FieldLengths.SECURITY_DATA_INDICATOR
-  );
-  bcbp.data!.securityDataType = mainSection.getNextString(
-      FieldLengths.SECURITY_DATA_TYPE
-  );
+  bcbp.meta!.securityDataIndicator =
+      mainSection.getNextString(FieldLengths.SECURITY_DATA_INDICATOR);
+  bcbp.data!.securityDataType =
+      mainSection.getNextString(FieldLengths.SECURITY_DATA_TYPE);
 
   final securitySectionSize = mainSection.getNextSectionSize();
-  final securitySection = SectionDecoder(
-      mainSection.getNextString(securitySectionSize)
-  );
-  bcbp.data!.securityData = securitySection.getNextString(FieldLengths.SECURITY_DATA);
+  final securitySection =
+      SectionDecoder(mainSection.getNextString(securitySectionSize));
+  bcbp.data!.securityData =
+      securitySection.getNextString(FieldLengths.SECURITY_DATA);
 
   if (bcbp.data!.issuanceDate != null) {
     final issuanceYear = bcbp.data!.issuanceDate!.year;
     for (Leg leg in bcbp.data!.legs!) {
       if (leg.flightDate != null) {
         final dayOfYear = dateToDayOfYear(leg.flightDate!);
-        DateTime updatedFlightDate = dayOfYearToDate(dayOfYear, false, referenceYear: issuanceYear);
+        DateTime updatedFlightDate =
+            dayOfYearToDate(dayOfYear, false, referenceYear: issuanceYear);
         if (updatedFlightDate.isBefore(bcbp.data!.issuanceDate!)) {
-          updatedFlightDate = dayOfYearToDate(dayOfYear, false, referenceYear: issuanceYear + 1);
+          updatedFlightDate = dayOfYearToDate(dayOfYear, false,
+              referenceYear: issuanceYear + 1);
         }
 
         // Cập nhật leg với ngày bay mới
@@ -239,7 +236,8 @@ BarCodedBoardingPass bcbpDecode(String barcodeString, {int? referenceYear}) {
           airlineNumericCode: leg.airlineNumericCode,
           serialNumber: leg.serialNumber,
           selecteeIndicator: leg.selecteeIndicator,
-          internationalDocumentationVerification: leg.internationalDocumentationVerification,
+          internationalDocumentationVerification:
+              leg.internationalDocumentationVerification,
           marketingCarrierDesignator: leg.marketingCarrierDesignator,
           frequentFlyerAirlineDesignator: leg.frequentFlyerAirlineDesignator,
           frequentFlyerNumber: leg.frequentFlyerNumber,
